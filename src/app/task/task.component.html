@@ -1,0 +1,24 @@
+<div class="p-field">
+  <label for="title">Title</label>
+  <input
+    id="title"
+    type="title"
+    aria-describedby="title-help"
+    class="p-invalid"
+    pInputText
+    [(ngModel)]="title"
+  />
+  <small id="title-help" class="p-invalid" *ngIf="isValid"
+    >Title is not empty.</small
+  >
+</div>
+<div class="text-end">
+  <button
+    pButton
+    pRipple
+    type="button"
+    label="Create New Task"
+    class="p-button-success me-2"
+    (click)="createTask()"
+  ></button>
+</div>

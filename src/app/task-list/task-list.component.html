@@ -1,0 +1,267 @@
+<div class="d-flex justify-content-between align-items-center me-4">
+  <h1>Board</h1>
+  <div>
+    <button
+      pButton
+      pRipple
+      type="button"
+      label="Create New Task"
+      class="p-button-success me-2"
+      (click)="show()"
+    ></button>
+    <p-dropdown
+      [options]="users"
+      [(ngModel)]="selectedUser"
+      optionLabel="name"
+      [style]="{ width: '140px' }"
+      placeholder="Assignee"
+      (onChange)="filterTask()"
+      [showClear]="true"
+    ></p-dropdown>
+  </div>
+</div>
+<!-- <div class="row gap-row">
+  <div class="col-3 py-2"><strong>USER STORIES</strong></div>
+  <div class="col-3 py-2"><strong>TO DO</strong></div>
+  <div class="col-3 py-2"><strong>IN PROGRESS</strong></div>
+  <div class="col-3 py-2"><strong>DONE</strong></div>
+</div>
+<div *ngFor="let us of lstUserStory; let i = index">
+  <div class="row gap-row mb-1">
+    <div class="col-3 px-1">
+      <div class="card my-2 mx-2">
+        <div class="my-3 px-2">
+          <div class="cursor-pointer">
+            <fa-icon class="us-icon" [icon]="faTableList"></fa-icon>
+            <strong class="ms-2">{{ us.id }}</strong>
+            <span class="ms-1" (click)="handleDetail(us)">{{
+              us.description
+            }}</span>
+          </div>
+          <div class="mt-2">
+            <span class="border rounded">{{ getName(us.user) }}</span>
+            <span class="ms-2">{{ us.user }}</span>
+          </div>
+          <div class="container-fluid mt-3">
+            <div class="row">
+              <div class="col-6">State</div>
+              <div class="col-6">
+                <fa-icon class="us-icon" [icon]="faCircleDot"></fa-icon>
+                <span class="ms-2">{{ us.state }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 px-1">
+      <div *ngIf="us.lstTodo.length">
+        <div
+          *ngFor="let todo of us.lstTodo; let indexTodo"
+          class="card my-2 mx-2"
+          [pDraggable]="us.id"
+          (onDragStart)="dragStart($event, todo)"
+          (onDragEnd)="dragEnd($event)"
+        >
+          <div class="my-3 px-2">
+            <div class="d-flex">
+              <fa-icon class="us-icon" [icon]="faFileCircleCheck"></fa-icon>
+              <strong class="ms-2">{{ todo.id }}</strong>
+              <span class="ms-1">{{ todo.description }}</span>
+            </div>
+            <div class="mt-2">
+              <span *ngIf="todo.user !== 'Unassigned'" class="border rounded">{{
+                getName(todo.user)
+              }}</span>
+              <span *ngIf="todo.user === 'Unassigned'"
+                ><fa-icon [icon]="faUser"></fa-icon
+              ></span>
+              <span class="ms-2">{{ todo.user }}</span>
+            </div>
+            <div class="container-fluid mt-3">
+              <div class="row">
+                <div class="col-6">State</div>
+                <div class="col-6">
+                  <fa-icon class="us-icon" [icon]="faCircleDot"></fa-icon>
+                  <span class="ms-2">{{ todo.state }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card my-2 mx-2" *ngIf="us.isCreated">
+        <div class="my-3 px-2">
+          <textarea
+            class="area-custom"
+            rows="2"
+            cols="25"
+            pInputTextarea
+            (focusout)="focusOut(i)"
+            [(ngModel)]="description"
+            autoResize="true"
+          ></textarea>
+          <div class="mt-2">
+            <span><fa-icon [icon]="faUser"></fa-icon></span>
+            <span class="ms-2">Unassigned</span>
+          </div>
+          <div class="container-fluid mt-3">
+            <div class="row">
+              <div class="col-6">State</div>
+              <div class="col-6">
+                <fa-icon class="us-icon" [icon]="faCircleDot"></fa-icon>
+                <span class="ms-2">To Do</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <fa-icon
+        class="add-icon ms-2"
+        [icon]="faSquarePlus"
+        (click)="addTask(i)"
+      ></fa-icon>
+    </div>
+    <div class="col-3 px-1" [pDroppable]="us.id" (onDrop)="drop($event, i)">
+      <div
+        class="card my-2 mx-2"
+        *ngFor="let inprogress of us.lstInprogress"
+        [pDraggable]="us.id"
+        (onDragStart)="dragStart($event, inprogress)"
+        (onDragEnd)="dragEnd($event)"
+      >
+        <div class="my-3 px-2">
+          <div>
+            <fa-icon class="us-icon" [icon]="faFileCircleCheck"></fa-icon>
+            <strong class="ms-2">{{ inprogress.id }}</strong>
+            <span class="ms-1">{{ inprogress.description }}</span>
+          </div>
+          <div class="mt-2">
+            <span class="border rounded">{{ getName(inprogress.user) }}</span>
+            <span class="ms-2">{{ inprogress.user }}</span>
+          </div>
+          <div class="container-fluid mt-3">
+            <div class="row">
+              <div class="col-6">State</div>
+              <div class="col-6">
+                <fa-icon class="us-icon" [icon]="faCircleDot"></fa-icon>
+                <span class="ms-2">{{ inprogress.state }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 px-1" [pDroppable]="us.id" (onDrop)="drop($event, i)">
+      <div class="card my-2 mx-2" *ngFor="let done of us.lstDone">
+        <div class="my-3 px-2">
+          <div>
+            <fa-icon class="us-icon" [icon]="faFileCircleCheck"></fa-icon>
+            <strong class="ms-2">{{ done.id }}</strong>
+            <span class="ms-1">Create managing app</span>
+          </div>
+          <div class="mt-2">
+            <span class="border rounded">{{ getName(done.user) }}</span>
+            <span class="ms-2">{{ done.user }}</span>
+          </div>
+          <div class="container-fluid mt-3">
+            <div class="row">
+              <div class="col-6">State</div>
+              <div class="col-6">
+                <fa-icon class="us-icon" [icon]="faCircleDot"></fa-icon>
+                <span class="ms-2">{{ done.state }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="row gap-row">
+  <div class="col-6 col-background py-2"><strong>TASK</strong></div>
+  <div class="col-6 col-background py-2"><strong>DONE</strong></div>
+</div>
+<div class="row gap-row mb-1">
+  <div class="col-6 col-background px-1">
+    <div *ngIf="tasksTodo && tasksTodo.length">
+      <div
+        *ngFor="let todo of tasksTodo"
+        class="card my-2 mx-2"
+        pDraggable="task"
+        (onDragStart)="dragStart($event, todo)"
+        (onDragEnd)="dragEnd($event)"
+      >
+        <div class="my-3 px-2">
+          <div class="d-flex justify-content-between">
+            <div (click)="handleDetail(todo.id)" class="cursor-pointer">
+              <fa-icon class="us-icon" [icon]="faFileCircleCheck"></fa-icon>
+              <strong class="ms-2">{{ todo?.id }}: </strong>
+              <span class="ms-1">{{ todo.description }}</span>
+            </div>
+            <fa-icon
+              class="us-icon cursor-pointer"
+              [icon]="faPenToSquare"
+              (click)="showTaskById(todo)"
+            ></fa-icon>
+          </div>
+          <div class="mt-2">
+            <span *ngIf="todo.user === 'Unassigned'"
+              ><fa-icon [icon]="faUser"></fa-icon
+            ></span>
+            <strong>Assignee:</strong>
+            <span class="ms-2">{{
+              getUserById(todo.assigneeId) || "Unassignee"
+            }}</span>
+          </div>
+          <div class="container-fluid mt-3">
+            <div class="row">
+              <div class="col-6">State</div>
+              <div class="col-6">
+                <fa-icon class="us-icon" [icon]="faCircleDot"></fa-icon>
+                <span class="ms-2">To Do</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="col-6 col-background px-1"
+    pDroppable="task"
+    (onDrop)="drop($event)"
+  >
+    <div class="card my-2 mx-2" *ngFor="let done of tasksDone">
+      <div class="my-3 px-2">
+        <div class="d-flex justify-content-between">
+          <div (click)="handleDetail(done.id)">
+            <fa-icon class="us-icon" [icon]="faFileCircleCheck"></fa-icon>
+            <strong class="ms-2">{{ done?.id }}: </strong>
+            <span class="ms-1">{{ done.description }}</span>
+          </div>
+          <fa-icon
+            class="us-icon cursor-pointer"
+            [icon]="faPenToSquare"
+            (click)="showTaskById(done)"
+          ></fa-icon>
+        </div>
+        <div class="mt-2">
+          <strong>Assignee:</strong>
+          <span class="ms-2">{{
+            getUserById(done.assigneeId) || "Unassignee"
+          }}</span>
+        </div>
+        <div class="container-fluid mt-3">
+          <div class="row">
+            <div class="col-6">State</div>
+            <div class="col-6">
+              <fa-icon class="us-icon" [icon]="faCircleDot"></fa-icon>
+              <span class="ms-2">Done</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

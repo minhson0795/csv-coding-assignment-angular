@@ -1,0 +1,20 @@
+<div>
+  <h3>Task details</h3>
+
+  <p>
+    <strong>Id: </strong>
+    <span>{{ task.id }}</span>
+  </p>
+  <p>
+    <strong>Description: </strong>
+    <span>{{ task.description }}</span>
+  </p>
+  <p>
+    <strong>State: </strong>
+    <span>{{ task.completed ? "Done" : "To Do" }}</span>
+  </p>
+  <p>
+    <strong>Assignee: </strong>
+    <span>{{ getUserById(task.assigneeId).name }}</span>
+  </p>
+</div>

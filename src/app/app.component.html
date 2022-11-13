@@ -1,0 +1,24 @@
+<div class="container-fluid header">
+  <div class="logo">
+    <a href="https://www.mealsuite.com/"
+      ><img
+        src="assets/imgs/mealsuite-logo.png"
+        title="MealSuite"
+        alt="MealSuite"
+        class="img-fluid" /></a
+    ><br />
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2 p-0">
+      <p-menu
+        [model]="items"
+        [style]="{ width: '14.5rem', minHeight: 'calc(100vh - 52px)', height: '100%' }"
+      ></p-menu>
+    </div>
+    <div class="col-10">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="container-fluid mt-3">
+  <div class="row">
+    <div class="col-3">
+      <label for="assign" class="me-3">Assign to:</label>
+    </div>
+    <div class="col-9">
+      <p-dropdown
+        [options]="users"
+        [(ngModel)]="selectedUser"
+        optionLabel="name"
+        [style]="{ width: '140px' }"
+        placeholder="Assignee"
+      ></p-dropdown>
+    </div>
+    <div class="col-3">
+      <label for="title">Completed</label>
+    </div>
+    <div class="col-9">
+      <p-dropdown
+        [options]="status"
+        [(ngModel)]="selectedStatus"
+        optionLabel="state"
+        [style]="{ width: '140px' }"
+        placeholder="Status"
+      ></p-dropdown>
+    </div>
+  </div>
+</div>
+<div class="text-end">
+  <button
+    pButton
+    pRipple
+    type="button"
+    label="Update Task"
+    class="p-button-info me-2"
+    (click)="updateTask()"
+  ></button>
+</div>
